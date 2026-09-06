@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>PrimeShield Color Visualizer</title>
+<meta name="description" content="Zobacz swoje auto w kolorowej folii PPF PrimeShield."/>
+<meta name="theme-color" content="#ffffff"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23e91e8f'/%3E%3Cpath d='M16 6l8 4v7c0 5-3.4 8-8 9-4.6-1-8-4-8-9v-7z' fill='%23fff'/%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="visualizer.css"/>
+</head>
+<body>
+<header class="site-header" id="siteHeader">
+  <div class="nav-wrap">
+    <nav class="site-nav">
+      <a class="site-logo" href="https://primeshield.pl/" aria-label="PrimeShield — strona główna"><img src="logo-simple.png" alt="PrimeShield PPF"/></a>
+      <div class="site-nav-links">
+        <a href="https://primeshield.pl/#produkty">Produkty</a>
+        <a href="https://primeshield.pl/strefa-b2b.html">Strefa B2B</a>
+        <a href="https://primeshield.pl/#technologia">Technologia</a>
+        <a href="https://primeshield.pl/#aplikacja">Kontakt</a>
+      </div>
+      <a class="site-cta" href="https://wa.me/48533188235" target="_blank" rel="noopener">Wycena w 15 minut</a>
+      <button class="nav-toggle" id="navToggle" type="button" aria-label="Otwórz menu" aria-expanded="false">☰</button>
+    </nav>
+  </div>
+</header>
+<div class="mobile-menu-overlay" id="mobileMenuOverlay" aria-hidden="true"><div class="mobile-menu-inner"><nav class="mobile-menu-links">
+  <a href="https://primeshield.pl/#produkty">Produkty</a><a href="https://primeshield.pl/strefa-b2b.html">Strefa B2B</a><a href="https://primeshield.pl/#technologia">Technologia</a><a href="https://primeshield.pl/#aplikacja">Kontakt</a>
+</nav></div></div>
+
+<div class="setup" id="setup">Webhook Make nie jest jeszcze ustawiony.</div>
+
+<main class="configurator-shell">
+  <section class="vehicle-panel" aria-label="Podgląd samochodu">
+    <div class="canvas-topbar">
+      <div>
+        <span class="canvas-kicker">PrimeShield Color Visualizer</span>
+        <h1>Twój samochód. Twój kolor.</h1>
+      </div>
+      <div class="showroom-switch" id="showroomSwitch" hidden>
+        <button type="button" id="showroomOriginalBtn" aria-pressed="false">Oryginał</button>
+        <button type="button" id="showroomResultBtn" aria-pressed="true">Wizualizacja</button>
+      </div>
+    </div>
+
+    <div class="showroom-card" id="showroomCard">
+      <div class="showroom-stage" id="showroomStage">
+        <div class="showroom-empty" id="showroomEmpty">
+          <div class="showroom-empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35"><path d="M4 17.5V10l2.2-4h11.6l2.2 4v7.5"/><path d="M6 10h12M7.5 17.5v1.5m9-1.5V19"/><circle cx="7.5" cy="14" r="1.2"/><circle cx="16.5" cy="14" r="1.2"/></svg>
+          </div>
+          <strong>Dodaj zdjęcie samochodu</strong>
+          <span>Zdjęcie pojawi się tutaj w dużym podglądzie.</span>
+          <button class="empty-upload" type="button" onclick="document.getElementById('file').click()">Wybierz zdjęcie</button>
+        </div>
+        <img id="showroomImg" alt="Podgląd konfiguracji samochodu"/>
+        <div class="showroom-loading" id="showroomLoading"><span class="spinner"></span><span>Przygotowujemy wizualizację…</span></div>
+      </div>
+
+      <div class="floating-selection">
+        <div class="selected-swatch" id="selectedSwatch"></div>
+        <div class="selected-film-copy">
+          <span class="selection-label">Wybrany kolor</span>
+          <strong id="selectedFilmName">Wybierz folię</strong>
+          <span id="selectedFilmMeta">Kod i wykończenie</span>
+        </div>
+        <span class="showroom-state" id="showroomState">Oczekiwanie</span>
+      </div>
+      <div class="showroom-toolbar" aria-hidden="true"><span class="showroom-badge" id="showroomBadge"><span>✦</span> Podgląd samochodu</span></div>
+    </div>
+
+    <div class="vehicle-note">Wizualizacja poglądowa — rzeczywisty odcień zależy od światła i ekranu.</div>
+  </section>
+
+  <aside class="config-panel" aria-label="Opcje konfiguratora">
+    <div class="panel-head">
+      <div>
+        <span class="panel-kicker">Konfiguracja</span>
+        <h2>Kolor PPF</h2>
+      </div>
+      <span class="panel-count" id="colorCount">289</span>
+    </div>
+
+    <section class="option-section catalog-column" id="step1" aria-labelledby="t1">
+      <div class="config-head compact-head">
+        <span class="step-num" id="n1">1</span>
+        <div><h2 class="step-title" id="t1">Wybierz folię</h2><p class="step-hint">Nazwa, kod lub wykończenie.</p></div>
+      </div>
+
+      <div class="catalog-tools">
+        <div class="color-search">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4" stroke-linecap="round"/></svg>
+          <input id="colorSearch" type="search" autocomplete="off" placeholder="Szukaj koloru lub kodu…" aria-label="Szukaj koloru folii"/>
+          <button id="colorSearchClear" class="search-clear" type="button" aria-label="Wyczyść wyszukiwanie" hidden>×</button>
+        </div>
+        <div class="finish-filters" id="finishFilters" role="group" aria-label="Filtr wykończenia">
+          <button type="button" class="filter-chip is-active" data-finish="all">Wszystkie</button>
+          <button type="button" class="filter-chip" data-finish="gloss">Połysk</button>
+          <button type="button" class="filter-chip" data-finish="satin">Satyna</button>
+          <button type="button" class="filter-chip" data-finish="matte">Mat</button>
+          <button type="button" class="filter-chip" data-finish="metallic">Metalik</button>
+          <button type="button" class="filter-chip" data-finish="pearl">Perła</button>
+          <button type="button" class="filter-chip" data-finish="diamond">Diamond</button>
+          <button type="button" class="filter-chip" data-finish="chameleon">Kameleon</button>
+          <button type="button" class="filter-chip" data-finish="carbon">Carbon</button>
+        </div>
+      </div>
+
+      <div class="films" id="films" role="group" aria-label="Katalog folii PPF"></div>
+      <div class="empty-colors" id="emptyColors">Nie znaleziono koloru.</div>
+      <div class="catalog-footer"><span class="catalog-result-note">Kolory PrimeShield</span><button class="catalog-toggle" id="toggleCatalog" type="button">Pokaż wszystkie</button></div>
+    </section>
+
+    <div class="panel-divider"></div>
+
+    <section class="option-section upload-column" id="step2" aria-labelledby="t2">
+      <div class="section-row-title">
+        <div><span class="section-label">Samochód</span><strong id="t2">Twoje zdjęcie</strong></div>
+        <button class="mini-action" id="changePhoto" type="button">Zmień</button>
+      </div>
+      <span class="step-num" id="n2">2</span>
+      <div class="drop" id="drop" role="button" tabindex="0" aria-label="Dodaj zdjęcie samochodu">
+        <svg class="drop-icon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3" stroke-linecap="round"/></svg>
+        <div><div class="drop-title">Wybierz zdjęcie auta</div><div class="drop-sub">JPG, PNG lub WEBP</div></div>
+      </div>
+      <input class="sr" id="file" type="file" accept="image/jpeg,image/png,image/webp,image/*"/>
+      <div class="preview" id="preview">
+        <img id="previewImg" alt="Podgląd dodanego zdjęcia"/>
+        <div class="preview-bar"><span class="preview-name" id="previewName"></span></div>
+      </div>
+      <div class="upload-ok" id="uploadOk"><span>✓</span> Zdjęcie gotowe</div>
+    </section>
+
+    <div class="panel-bottom">
+      <section class="option-section generate-column" id="step3" aria-labelledby="t3">
+        <span class="step-num" id="n3">3</span>
+        <h2 class="step-title" id="t3">Wygeneruj</h2>
+        <button class="btn btn--accent btn--go" id="go" type="button">Zastosuj folię</button>
+        <p class="go-note" id="goNote">Wybierz folię i dodaj zdjęcie.</p>
+        <div class="status" id="status" role="status" aria-live="polite"><span class="spinner" aria-hidden="true"></span><span><span class="status-text">PrimeShield AI przygotowuje wizualizację…</span><span class="status-sub" id="statusSub">Zwykle trwa to 15–40 sekund.</span></span></div>
+        <div class="alert" id="alert" role="alert"><div><div class="alert-title" id="alertTitle"></div><div class="alert-body" id="alertBody"></div></div></div>
+        <div class="notice" id="notice"></div>
+      </section>
+
+      <section class="result" id="result" tabindex="-1" aria-labelledby="rt">
+        <div class="result-head"><div><div class="result-film" id="rt">Wizualizacja</div><div class="result-sub" id="resultSub"></div></div></div>
+        <div class="seg" role="group" aria-label="Widok"><button type="button" data-view="original" aria-pressed="false">Oryginał</button><button type="button" data-view="compare" aria-pressed="false">Porównaj</button><button type="button" data-view="result" aria-pressed="true">Wizualizacja</button></div>
+        <div class="stage" id="stage"><img id="afterImg" alt="Auto w wybranej folii PPF"/><div class="layer-top" id="layerTop"><img id="beforeImg" alt="Oryginalne zdjęcie auta"/></div><div class="handle" id="handle"></div><span class="stage-tag tag-left">Oryginał</span><span class="stage-tag tag-right">Wizualizacja</span><input class="range" id="range" type="range" min="0" max="100" value="50" aria-label="Suwak porównania"/></div>
+        <div class="actions"><button class="btn btn--ghost" id="download" type="button">Pobierz</button><button class="btn btn--ghost" id="again" type="button">Generuj ponownie</button><button class="btn btn--ghost" id="another" type="button">Inny kolor</button></div>
+      </section>
+    </div>
+  </aside>
+</main>
+
+<details class="debug" id="debug"><summary>Debug</summary><pre id="debugOut">Brak danych — uruchom generowanie.</pre></details>
+
+<script src="catalog-embedded.js"></script>
+<script src="visualizer.js"></script>
+</body>
+</html>
